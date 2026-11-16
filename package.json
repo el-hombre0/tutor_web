@@ -1,0 +1,10 @@
+{
+  "name": "tutor-platform",
+  "private": true,
+  "packageManager": "pnpm@11.25.0",
+  "scripts": {
+    "dev:web": "pnpm --filter tutor-web dev",
+    "build:web": "pnpm --filter tutor-web build",
+    "lint:web": "pnpm --filter tutor-web lint"
+  }
+}
