@@ -2,7 +2,8 @@ import { Test, TestingModule } from '@nestjs/testing';
 import { INestApplication } from '@nestjs/common';
 import request from 'supertest';
 import { App } from 'supertest/types.js';
-import { AppModule } from './../src/app.module.js';
+import { AppController } from './../src/app.controller.js';
+import { AppService } from './../src/app.service.js';
 import { DatabaseHealth } from './../src/database-health.js';
 
 describe('AppController (e2e)', () => {
@@ -12,7 +13,8 @@ describe('AppController (e2e)', () => {
   beforeEach(async () => {
     ping = vi.fn().mockResolvedValue(undefined);
     const moduleFixture: TestingModule = await Test.createTestingModule({
-      imports: [AppModule],
+      controllers: [AppController],
+      providers: [AppService, { provide: DatabaseHealth, useValue: { ping } }],
     })
       .overrideProvider(DatabaseHealth)
       .useValue({ ping })

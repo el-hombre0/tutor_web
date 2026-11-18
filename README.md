@@ -48,4 +48,4 @@ docker compose exec postgres pg_isready -U tutor -d tutor
 docker compose down
 ```
 
-`docker compose down -v` удаляет том и все локальные данные БД. Маршрут API `/health` проверяет подключение к БД; основная бизнес-логика пока с ней не связана.
+`docker compose down -v` удаляет том и все локальные данные БД. API подключается к БД через TypeORM. Перед первым запуском примените миграцию: `pnpm build:api`, затем `pnpm --filter tutor-api migration:run`. Подробнее — в `apps/api/README.md`.
