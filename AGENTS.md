@@ -16,7 +16,12 @@
 Требования к комментариям и документации.
 - Все публичные методы должны иметь JSDoc/Godoc.
 - Обновляй README.md при изменении API.
-- 
+
+# Software tools
+Клиентская часть: NextJS, TypeScript, TailwindCSS, ShadCN, Lucide
+Серверная часть: NestJS
+База данных: PostgreSQL
+
 <!-- BEGIN:nextjs-agent-rules -->
 
 ## This is NOT the Next.js you know

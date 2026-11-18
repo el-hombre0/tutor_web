@@ -3,6 +3,8 @@
 Монорепозиторий проекта: Next.js в `apps/web`, NestJS API в `apps/api`.
 `packages/contracts` подготовлен для будущих общих контрактов.
 
+Интерфейс сайта разрабатывается с Tailwind CSS, компонентами shadcn/ui в `apps/web/components/ui` и иконками Lucide. Конфигурация shadcn/ui находится в `apps/web/components.json`.
+
 ## Локальный запуск сайта
 
 Нужны Node.js 22.22.3+ (либо 24.15+ или 26+) и pnpm 11.25.0.
@@ -15,6 +17,7 @@ pnpm dev:api
 
 Сайт откроется на http://localhost:3000, API — на http://localhost:3001.
 Проверка API и подключения к БД: http://localhost:3001/health.
+Страница `/status` показывает результат этой проверки. Сервер Next.js обращается к `http://127.0.0.1:3001`; если API расположен на другом адресе, задайте `API_URL` в `apps/web/.env.local` (например, `API_URL=http://127.0.0.1:3001`).
 Команды `dev:web` и `dev:api` запускаются в отдельных терминалах.
 
 Проверки сайта: `pnpm lint:web`, `pnpm build:web`.
