@@ -14,7 +14,7 @@ pnpm dev:api
 ```
 
 Сайт откроется на http://localhost:3000, API — на http://localhost:3001.
-Проверка API: http://localhost:3001/health.
+Проверка API и подключения к БД: http://localhost:3001/health.
 Команды `dev:web` и `dev:api` запускаются в отдельных терминалах.
 
 Проверки сайта: `pnpm lint:web`, `pnpm build:web`.
@@ -45,4 +45,4 @@ docker compose exec postgres pg_isready -U tutor -d tutor
 docker compose down
 ```
 
-`docker compose down -v` удаляет том и все локальные данные БД. API пока не подключён к PostgreSQL; это следующий шаг проекта.
+`docker compose down -v` удаляет том и все локальные данные БД. Маршрут API `/health` проверяет подключение к БД; основная бизнес-логика пока с ней не связана.

@@ -1,9 +1,17 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, ServiceUnavailableException } from '@nestjs/common';
+import { DatabaseHealth } from './database-health.js';
 
 @Injectable()
 export class AppService {
-  /** Returns a healthy status while the API process is running. */
-  getHealth(): { status: string } {
-    return { status: 'ok' };
+  constructor(private readonly databaseHealth: DatabaseHealth) {}
+
+  /** Returns API and database state, failing readiness when the database is unavailable. */
+  async getHealth(): Promise<{ api: 'up'; database: 'up' }> {
+    try {
+      await this.databaseHealth.ping();
+      return { api: 'up', database: 'up' };
+    } catch {
+      throw new ServiceUnavailableException({ api: 'up', database: 'down' });
+    }
   }
 }

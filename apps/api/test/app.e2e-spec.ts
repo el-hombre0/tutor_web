@@ -3,24 +3,38 @@ import { INestApplication } from '@nestjs/common';
 import request from 'supertest';
 import { App } from 'supertest/types.js';
 import { AppModule } from './../src/app.module.js';
+import { DatabaseHealth } from './../src/database-health.js';
 
 describe('AppController (e2e)', () => {
   let app: INestApplication<App>;
+  let ping: ReturnType<typeof vi.fn>;
 
   beforeEach(async () => {
+    ping = vi.fn().mockResolvedValue(undefined);
     const moduleFixture: TestingModule = await Test.createTestingModule({
       imports: [AppModule],
-    }).compile();
+    })
+      .overrideProvider(DatabaseHealth)
+      .useValue({ ping })
+      .compile();
 
     app = moduleFixture.createNestApplication();
     await app.init();
   });
 
-  it('/health (GET)', () => {
+  it('/health (GET) reports a healthy database', () => {
     return request(app.getHttpServer())
       .get('/health')
       .expect(200)
-      .expect({ status: 'ok' });
+      .expect({ api: 'up', database: 'up' });
+  });
+
+  it('/health (GET) reports an unavailable database', () => {
+    ping.mockRejectedValue(new Error('connection failed'));
+    return request(app.getHttpServer())
+      .get('/health')
+      .expect(503)
+      .expect({ api: 'up', database: 'down' });
   });
 
   afterEach(async () => {

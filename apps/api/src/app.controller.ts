@@ -5,9 +5,9 @@ import { AppService } from './app.service.js';
 export class AppController {
   constructor(private readonly appService: AppService) {}
 
-  /** Returns the API process status. */
+  /** Returns API and database status. */
   @Get('health')
-  getHealth(): { status: string } {
+  getHealth(): Promise<{ api: 'up'; database: 'up' }> {
     return this.appService.getHealth();
   }
 }
