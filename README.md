@@ -1,17 +1,48 @@
 # Платформа репетитора
 
-Монорепозиторий проекта. Существующий сайт Next.js расположен в `apps/web`.
-Каталоги `apps/api` и `packages/contracts` подготовлены для будущего API и общих контрактов; код в них пока не создан.
+Монорепозиторий проекта: Next.js в `apps/web`, NestJS API в `apps/api`.
+`packages/contracts` подготовлен для будущих общих контрактов.
 
 ## Локальный запуск сайта
 
-Нужны Node.js и pnpm 11.25.0.
+Нужны Node.js 22.22.3+ (либо 24.15+ или 26+) и pnpm 11.25.0.
 
 ```bash
 pnpm install
 pnpm dev:web
+pnpm dev:api
 ```
 
-Сайт откроется на http://localhost:3000. Проверки: `pnpm lint:web` и `pnpm build:web`.
+Сайт откроется на http://localhost:3000, API — на http://localhost:3001.
+Проверка API: http://localhost:3001/health.
+Команды `dev:web` и `dev:api` запускаются в отдельных терминалах.
 
-`apps/web` собирается и развёртывается отдельно от будущего `apps/api`.
+Проверки сайта: `pnpm lint:web`, `pnpm build:web`.
+Проверки API: `pnpm lint:api`, `pnpm build:api`, `pnpm test:api`, `pnpm test:e2e:api`.
+
+`apps/web` и `apps/api` собираются и развёртываются отдельно.
+
+## Локальная база данных
+
+PostgreSQL 17 запускается отдельно от приложений через Docker Compose:
+
+```bash
+cp .env.example .env
+# Укажите собственный POSTGRES_PASSWORD в .env перед запуском
+docker compose up -d postgres
+docker compose ps
+```
+
+База доступна с компьютера по `127.0.0.1:5432` (порт можно изменить в `.env`).
+Имя БД, пользователь и пароль указаны в `.env`. Из другого контейнера Compose адрес сервиса — `postgres:5432`.
+В этом же `.env` можно настроить `API_PORT` для локального запуска NestJS; по умолчанию это `3001`. Next.js пока не использует переменные окружения.
+Данные сохраняются в именованном томе `postgres_data` между перезапусками контейнера.
+
+Проверить подключение и остановить базу:
+
+```bash
+docker compose exec postgres pg_isready -U tutor -d tutor
+docker compose down
+```
+
+`docker compose down -v` удаляет том и все локальные данные БД. API пока не подключён к PostgreSQL; это следующий шаг проекта.
